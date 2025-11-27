@@ -1,8 +1,30 @@
 import { useState } from 'react'
 import './App.css'
 
+type FormDataType = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  age: string;
+  city: string;
+}
+
 function App() {
   const [currentStep, setCurrentStep] = useState(0);
+  const [formData, setFormData] = useState<FormDataType>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    age: "",
+    city: "",
+  })
+
+  const updateFields = (fields: Partial<FormDataType>) => {
+    setFormData((prev) => ({
+      ...prev,
+      ...fields,
+    }));
+  }
 
   const nextStep = () => {
     setCurrentStep((prev) => Math.min(prev + 1, 3));
@@ -15,6 +37,8 @@ function App() {
   return (
     <div style={{ padding: 20 }}>
       <h1>Step {currentStep + 1} / 4</h1>
+      {/* TEMP: show the formData so we see updates later */}
+      <pre>{JSON.stringify(formData, null, 2)}</pre>
 
       {currentStep === 0 && <div>Step 1 Placeholder</div>}
       {currentStep === 1 && <div>Step 2 Placeholder</div>}
@@ -28,4 +52,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
