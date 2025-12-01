@@ -1,25 +1,35 @@
 import { useState } from 'react'
-import './App.css'
+import StepOne from './steps/StepOne';
+import StepTwo from './steps/StepTwo';
+import StepThree from './steps/StepThree';
+import StepFour from './steps/StepFour';
+import './App.css';
 
-type FormDataType = {
+export type FormData = {
   firstName: string;
   lastName: string;
   email: string;
   age: string;
   city: string;
+  password: string;
+  confirmPassword: string;
+}
+
+const INITIAL_DATA: FormData = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  age: "",
+  city: "",
+  password: "",
+  confirmPassword: "",
 }
 
 function App() {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState<FormDataType>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    age: "",
-    city: "",
-  })
+  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [formData, setFormData] = useState<FormData>(INITIAL_DATA);
 
-  const updateFields = (fields: Partial<FormDataType>) => {
+  const updateFields = (fields: Partial<FormData>) => {
     setFormData((prev) => ({
       ...prev,
       ...fields,
@@ -40,11 +50,35 @@ function App() {
       {/* TEMP: show the formData so we see updates later */}
       <pre>{JSON.stringify(formData, null, 2)}</pre>
 
-      {currentStep === 0 && <div>Step 1 Placeholder</div>}
-      {currentStep === 1 && <div>Step 2 Placeholder</div>}
-      {currentStep === 2 && <div>Step 3 Placeholder</div>}
-      {currentStep === 3 && <div>Step 4 Placeholder</div>}
+      {currentStep === 0 && (
+        <StepOne
+          firstName={formData.firstName}
+          lastName={formData.lastName}
+          updateFields={updateFields}
+        />
+      )}
 
+      {currentStep === 1 && (
+        <StepTwo
+        email={formData.email}
+        age={formData.age}
+        updateFields={updateFields}
+        />
+      )}
+      {currentStep === 2 && (
+        <StepThree
+          city={formData.city}
+          updateFields={updateFields}
+        />
+      )}
+      {currentStep === 3 && (
+        <StepFour
+        password={formData.password}
+        confirmPassword={formData.confirmPassword}
+        updateFields={updateFields}
+        />
+      )}
+    
       <br/>
       <button disabled={currentStep === 0} onClick={prevStep}>Back</button>
       <button disabled={currentStep === 3} onClick={nextStep} style={{ marginLeft: 10 }}>Next</button>
